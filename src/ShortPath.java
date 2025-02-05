@@ -11,9 +11,7 @@ public class ShortPath {
                     System.out.printf("Input length of road (%s,%s): ",strings[i],strings[j]);
                     Integer length = sc.nextInt();
                     roads.put(strings[i] + strings[j], length);
-
-                    roads.put(strings[j] + strings[i], length); // Двусторонняя дорога
-
+                    roads.put(strings[j] + strings[i], length);
                 }
             }
             else if(i == 7){
@@ -29,31 +27,23 @@ public class ShortPath {
             }
         }
         System.out.println(roads);
-        // Чтение начальной и конечной точки
         System.out.print("Enter start point: ");
         String start = sc.next();
         System.out.print("Enter end point: ");
         String end = sc.next();
-
-        // Поиск кратчайшего пути
         findShortestPath(strings, roads, start, end);
     }
     public static void findShortestPath(String[] nodes, HashMap<String, Integer> roads, String start, String end) {
         Map<String, Integer> distances = new HashMap<>();
         Map<String, String> previous = new HashMap<>();
         PriorityQueue<String> queue = new PriorityQueue<>(Comparator.comparingInt(distances::get));
-
-        // Инициализация
         for (String node : nodes) {
             distances.put(node, Integer.MAX_VALUE);
         }
         distances.put(start, 0);
         queue.add(start);
-
-        // Алгоритм Дейкстры
         while (!queue.isEmpty()) {
             String current = queue.poll();
-
             for (String neighbor : nodes) {
                 if (roads.containsKey(current + neighbor)) {
                     int newDist = distances.get(current) + roads.get(current + neighbor);
@@ -65,8 +55,6 @@ public class ShortPath {
                 }
             }
         }
-
-        // Восстановление пути
         List<String> path = new ArrayList<>();
         String step = end;
         while (step != null) {
@@ -74,8 +62,6 @@ public class ShortPath {
             step = previous.get(step);
         }
         Collections.reverse(path);
-
-        // Вывод результата
         if (distances.get(end) == Integer.MAX_VALUE) {
             System.out.println("No path found.");
         } else {
